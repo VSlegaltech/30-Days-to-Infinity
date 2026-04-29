@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>30 Days to Infinity</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="30 Days to Infinity home">
+        <span class="brand-mark">∞</span>
+        <span>30 Days to Infinity</span>
+      </a>
+      <nav aria-label="Primary">
+        <a href="#chapters">Chapters</a>
+        <a href="#workbook">Workbook</a>
+        <a href="#community">Community</a>
+        <a href="#shop">Shop</a>
+        <a href="#admin">Author CMS</a>
+      </nav>
+      <button class="ghost-button" id="loginButton" type="button">Sign in</button>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow">A 30-day guided reading and practice space</p>
+          <h1>30 Days to Infinity</h1>
+          <p>
+            Read one chapter each day, save your workbook reflections, ask the author
+            questions, and keep the journey close with signed editions and companion
+            merchandise.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#chapters">Start reading</a>
+            <a class="secondary-button" href="#admin">Open author CMS</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="status-band" aria-label="Platform status">
+        <div>
+          <strong>30</strong>
+          <span>daily chapters</span>
+        </div>
+        <div>
+          <strong id="savedCount">0</strong>
+          <span>saved workbook entries</span>
+        </div>
+        <div>
+          <strong id="questionCount">0</strong>
+          <span>community questions</span>
+        </div>
+        <div>
+          <strong id="productCount">0</strong>
+          <span>shop products</span>
+        </div>
+      </section>
+
+      <section class="app-section" id="chapters">
+        <div class="section-heading">
+          <p class="eyebrow">Reader library</p>
+          <h2>Daily chapters</h2>
+        </div>
+        <div class="reader-layout">
+          <aside class="chapter-list" id="chapterList" aria-label="Chapter list"></aside>
+          <article class="chapter-reader">
+            <div class="reader-toolbar">
+              <span id="chapterMeta"></span>
+              <button class="icon-button" id="toggleComplete" type="button" title="Mark chapter complete">✓</button>
+            </div>
+            <h3 id="chapterTitle"></h3>
+            <p id="chapterBody"></p>
+            <div class="exercise-callout">
+              <strong>Today’s exercise</strong>
+              <p id="chapterExercise"></p>
+              <a class="text-link" href="#workbook">Open workbook</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="app-section muted" id="workbook">
+        <div class="section-heading">
+          <p class="eyebrow">Private reader space</p>
+          <h2>Workbook</h2>
+        </div>
+        <div class="workbook-grid">
+          <div class="tool-panel">
+            <label for="workbookDay">Choose day</label>
+            <select id="workbookDay"></select>
+            <label for="workbookResponse">Reflection</label>
+            <textarea id="workbookResponse" rows="10" placeholder="Sign in, then write your response here."></textarea>
+            <div class="form-row">
+              <button class="primary-button" id="saveWorkbook" type="button">Save response</button>
+              <button class="secondary-button" id="clearWorkbook" type="button">Clear</button>
+            </div>
+            <p class="helper-text" id="workbookStatus"></p>
+          </div>
+          <div class="tool-panel">
+            <h3>Login integrations</h3>
+            <p>
+              This prototype simulates the preferred production login flow.
+              Supabase Auth should be configured with Google and Facebook OAuth.
+            </p>
+            <div class="provider-grid">
+              <button class="provider" data-provider="Google" type="button">Google</button>
+              <button class="provider" data-provider="Facebook" type="button">Facebook</button>
+            </div>
+            <div class="current-user" id="currentUser">Signed out</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="app-section" id="community">
+        <div class="section-heading">
+          <p class="eyebrow">Community</p>
+          <h2>Ask the author</h2>
+        </div>
+        <div class="community-layout">
+          <form class="tool-panel" id="questionForm">
+            <label for="questionName">Name</label>
+            <input id="questionName" type="text" placeholder="Your name" />
+            <label for="questionText">Question</label>
+            <textarea id="questionText" rows="6" placeholder="What would you like to ask?"></textarea>
+            <button class="primary-button" type="submit">Submit question</button>
+            <p class="helper-text">Questions appear after author moderation.</p>
+          </form>
+          <div class="question-board" id="questionBoard"></div>
+        </div>
+      </section>
+
+      <section class="app-section muted" id="shop">
+        <div class="section-heading">
+          <p class="eyebrow">Merchandise</p>
+          <h2>Shop</h2>
+        </div>
+        <div class="shop-layout">
+          <div class="product-grid" id="productGrid"></div>
+          <aside class="cart-panel">
+            <h3>Cart estimate</h3>
+            <div id="cartItems"></div>
+            <div class="cart-line">
+              <span>Products</span>
+              <strong id="cartSubtotal">$0.00</strong>
+            </div>
+            <div class="cart-line">
+              <span>Shipping</span>
+              <strong id="cartShipping">$0.00</strong>
+            </div>
+            <div class="cart-total">
+              <span>Total</span>
+              <strong id="cartTotal">$0.00</strong>
+            </div>
+            <button class="primary-button full-width" id="checkoutButton" type="button">Checkout in USD</button>
+            <p class="helper-text" id="checkoutStatus">Production checkout should create a USD payment session on the server, then open the hosted checkout page.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="app-section" id="admin">
+        <div class="section-heading">
+          <p class="eyebrow">Author dashboard</p>
+          <h2>Content management system</h2>
+        </div>
+        <div class="admin-shell">
+          <aside class="admin-tabs" aria-label="CMS sections">
+            <button class="active" data-admin-tab="chapters" type="button">Chapters</button>
+            <button data-admin-tab="community" type="button">Moderation</button>
+            <button data-admin-tab="products" type="button">Products</button>
+            <button data-admin-tab="integrations" type="button">Integrations</button>
+          </aside>
+          <div class="admin-panel active" id="admin-chapters">
+            <div class="form-grid">
+              <label>
+                Day
+                <select id="cmsDay"></select>
+              </label>
+              <label>
+                Chapter title
+                <input id="cmsTitle" type="text" />
+              </label>
+            </div>
+            <label>
+              Chapter content
+              <textarea id="cmsBody" rows="8"></textarea>
+            </label>
+            <label>
+              Exercise prompt
+              <textarea id="cmsExercise" rows="4"></textarea>
+            </label>
+            <button class="primary-button" id="saveChapter" type="button">Save chapter</button>
+          </div>
+          <div class="admin-panel" id="admin-community">
+            <div class="moderation-list" id="moderationList"></div>
+          </div>
+          <div class="admin-panel" id="admin-products">
+            <div class="form-grid">
+              <label>
+                Product
+                <input id="productName" type="text" placeholder="Autographed copy" />
+              </label>
+              <label>
+                Price
+                <input id="productPrice" type="number" min="0" step="0.01" />
+              </label>
+              <label>
+                Shipping
+                <input id="productShipping" type="number" min="0" step="0.01" />
+              </label>
+            </div>
+            <label>
+              Description
+              <textarea id="productDescription" rows="4"></textarea>
+            </label>
+            <button class="primary-button" id="addProduct" type="button">Add product</button>
+          </div>
+          <div class="admin-panel" id="admin-integrations">
+            <div class="integration-grid">
+              <div class="integration-card">
+                <strong>Supabase CMS</strong>
+                <p>Public chapters, private workbook responses, author-only CMS updates, and approval-first community moderation.</p>
+                <code>docs/supabase-schema.sql</code>
+              </div>
+              <div class="integration-card">
+                <strong>Google + Facebook login</strong>
+                <p>Enable both providers in Supabase Auth and restrict moderator tools to users listed in the author profile table.</p>
+                <code>SUPABASE_URL · SUPABASE_ANON_KEY</code>
+              </div>
+              <div class="integration-card">
+                <strong>USD checkout</strong>
+                <p>Create checkout sessions from a serverless endpoint, calculate product and shipping totals server-side, and confirm payment webhooks.</p>
+                <code>CHECKOUT_PUBLIC_KEY · CHECKOUT_SECRET_KEY</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>30 Days to Infinity</strong>
+      <span>Prototype CMS, reader workbook, community, and shop.</span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

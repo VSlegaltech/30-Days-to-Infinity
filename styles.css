@@ -1,0 +1,549 @@
+:root {
+  color-scheme: light;
+  --ink: #18201c;
+  --muted-ink: #5b665f;
+  --paper: #f7f3ea;
+  --panel: #fffaf0;
+  --line: #ded5c6;
+  --sage: #586f61;
+  --sage-dark: #31493a;
+  --terracotta: #bd6145;
+  --gold: #c99d42;
+  --blue: #2d5f73;
+  --shadow: 0 20px 60px rgba(24, 32, 28, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.site-header {
+  align-items: center;
+  backdrop-filter: blur(18px);
+  background: rgba(247, 243, 234, 0.88);
+  border-bottom: 1px solid rgba(222, 213, 198, 0.8);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  min-height: 72px;
+  padding: 12px clamp(18px, 4vw, 56px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  align-items: center;
+  color: var(--ink);
+  display: inline-flex;
+  font-weight: 800;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  align-items: center;
+  background: var(--sage-dark);
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  font-size: 20px;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+nav a,
+.text-link {
+  color: var(--sage-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hero {
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(16, 24, 19, 0.88), rgba(16, 24, 19, 0.52) 44%, rgba(16, 24, 19, 0.08)),
+    url("assets/hero-30-days-to-infinity.png") center / cover;
+  color: #fff;
+  display: flex;
+  min-height: calc(100vh - 72px);
+  padding: clamp(40px, 8vw, 92px);
+}
+
+.hero-copy {
+  max-width: 680px;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section-heading h2 {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.hero h1 {
+  font-size: clamp(3.6rem, 10vw, 8.8rem);
+  line-height: 0.9;
+  margin: 0;
+}
+
+.hero p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(1rem, 2vw, 1.28rem);
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+.hero-actions,
+.form-row,
+.provider-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button,
+.icon-button,
+.provider,
+.admin-tabs button {
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 44px;
+  padding: 0 18px;
+}
+
+.primary-button {
+  align-items: center;
+  background: var(--terracotta);
+  color: #fff;
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.secondary-button,
+.provider {
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--sage-dark);
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.ghost-button {
+  background: var(--sage-dark);
+  color: #fff;
+}
+
+.icon-button {
+  aspect-ratio: 1;
+  background: var(--sage-dark);
+  color: #fff;
+  padding: 0;
+  width: 44px;
+}
+
+.status-band {
+  background: var(--sage-dark);
+  color: #fff;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.status-band div {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 24px clamp(18px, 4vw, 44px);
+}
+
+.status-band strong {
+  display: block;
+  font-size: 2rem;
+}
+
+.status-band span {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.app-section {
+  padding: clamp(48px, 8vw, 92px) clamp(18px, 4vw, 56px);
+}
+
+.muted {
+  background: #ede8dc;
+}
+
+.section-heading {
+  margin: 0 auto 28px;
+  max-width: 1180px;
+}
+
+.section-heading h2 {
+  font-size: clamp(2.2rem, 5vw, 4.4rem);
+  line-height: 1;
+  margin: 0;
+}
+
+.reader-layout,
+.workbook-grid,
+.community-layout,
+.shop-layout,
+.admin-shell {
+  display: grid;
+  gap: 22px;
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.reader-layout {
+  grid-template-columns: minmax(220px, 320px) 1fr;
+}
+
+.chapter-list,
+.chapter-reader,
+.tool-panel,
+.cart-panel,
+.admin-shell,
+.admin-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.chapter-list {
+  max-height: 680px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.chapter-list button {
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: var(--ink);
+  cursor: pointer;
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+  min-height: 46px;
+  padding: 10px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.chapter-list button.active {
+  background: #e7decd;
+}
+
+.chapter-reader,
+.tool-panel,
+.cart-panel,
+.admin-panel {
+  padding: clamp(18px, 3vw, 32px);
+}
+
+.reader-toolbar,
+.cart-line,
+.cart-total {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reader-toolbar {
+  color: var(--muted-ink);
+  gap: 12px;
+}
+
+.chapter-reader h3 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+  margin: 18px 0 12px;
+}
+
+.chapter-reader p {
+  color: var(--muted-ink);
+  line-height: 1.8;
+}
+
+.exercise-callout {
+  background: #edf3ea;
+  border-left: 5px solid var(--sage);
+  border-radius: 8px;
+  margin-top: 28px;
+  padding: 18px;
+}
+
+.workbook-grid,
+.community-layout,
+.shop-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+label {
+  color: var(--sage-dark);
+  display: grid;
+  font-weight: 800;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+input,
+select,
+textarea {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  padding: 12px 14px;
+  width: 100%;
+}
+
+textarea {
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.helper-text {
+  color: var(--muted-ink);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.current-user {
+  background: #edf3ea;
+  border-radius: 8px;
+  color: var(--sage-dark);
+  font-weight: 800;
+  margin-top: 20px;
+  padding: 16px;
+}
+
+.question-board,
+.product-grid,
+.moderation-list {
+  display: grid;
+  gap: 14px;
+}
+
+.question-card,
+.product-card,
+.moderation-card,
+.cart-item,
+.integration-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.question-card.pending {
+  border-style: dashed;
+}
+
+.question-card p,
+.product-card p,
+.moderation-card p,
+.integration-card p {
+  color: var(--muted-ink);
+  line-height: 1.6;
+}
+
+.integration-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.integration-card code {
+  background: #edf3ea;
+  border-radius: 6px;
+  color: var(--sage-dark);
+  display: block;
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+  padding: 10px;
+}
+
+.answer {
+  background: #edf3ea;
+  border-radius: 8px;
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.shop-layout {
+  align-items: start;
+  grid-template-columns: 1fr minmax(280px, 360px);
+}
+
+.product-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.product-card strong {
+  color: var(--blue);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.cart-panel {
+  position: sticky;
+  top: 92px;
+}
+
+.cart-line,
+.cart-total {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.cart-total {
+  font-size: 1.25rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.admin-shell {
+  align-items: start;
+  box-shadow: none;
+  grid-template-columns: 220px 1fr;
+  padding: 12px;
+}
+
+.admin-tabs {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-tabs button {
+  background: transparent;
+  color: var(--sage-dark);
+  text-align: left;
+}
+
+.admin-tabs button.active {
+  background: var(--sage-dark);
+  color: #fff;
+}
+
+.admin-panel {
+  box-shadow: none;
+  display: none;
+}
+
+.admin-panel.active {
+  display: block;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+footer {
+  align-items: center;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 28px clamp(18px, 4vw, 56px);
+}
+
+footer span {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 900px) {
+  .site-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  nav {
+    justify-content: flex-start;
+  }
+
+  .hero {
+    min-height: 760px;
+  }
+
+  .status-band,
+  .reader-layout,
+  .workbook-grid,
+  .community-layout,
+  .shop-layout,
+  .admin-shell,
+  .product-grid,
+  .integration-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    background:
+      linear-gradient(180deg, rgba(16, 24, 19, 0.9), rgba(16, 24, 19, 0.45)),
+      url("assets/hero-30-days-to-infinity.png") center / cover;
+    min-height: 700px;
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 18vw, 4.8rem);
+  }
+
+  .primary-button,
+  .secondary-button,
+  .ghost-button {
+    width: 100%;
+  }
+}
