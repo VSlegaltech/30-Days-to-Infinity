@@ -22,3 +22,9 @@ Open `index.html` directly in a browser. The prototype stores data in `localStor
 4. Replace localStorage reads/writes in `app.js` with Supabase queries.
 5. Create a serverless checkout endpoint for USD payments. Never expose checkout secret keys in frontend code.
 6. Verify payment webhooks on the server before marking orders as paid.
+
+## Admin Subdomain
+
+The public website links the author CMS to `https://admin.30-days-to-infinity-zf74.vercel.app/`.
+
+For production, point that Vercel subdomain at `admin.html`, keep the login screen enabled, and replace the prototype login gate with Supabase Auth plus an author-role check before allowing any edit action.

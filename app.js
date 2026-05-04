@@ -85,7 +85,32 @@ const state = loadState();
 let selectedDay = 1;
 let currentUser = state.currentUser;
 
-document.querySelector("#redditCommunityLink").href = redditCommunityUrl;
+if (location.hostname.startsWith("admin.") && !location.pathname.includes("admin.html")) {
+  location.replace("/admin.html");
+}
+
+const redditCommunityLink = document.querySelector("#redditCommunityLink");
+if (redditCommunityLink) redditCommunityLink.href = redditCommunityUrl;
+
+document.querySelector("#adminLoginForm")?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const email = document.querySelector("#adminEmail").value.trim();
+  const password = document.querySelector("#adminPassword").value.trim();
+  const status = document.querySelector("#adminLoginStatus");
+  if (!email || !password) {
+    status.textContent = "Enter an email and password to open the CMS.";
+    return;
+  }
+  sessionStorage.setItem("admin-authenticated", "true");
+  document.querySelector("#adminLoginForm").classList.add("admin-locked");
+  document.querySelector("#adminArea").classList.add("active");
+  status.textContent = "Logged in.";
+});
+
+if (sessionStorage.getItem("admin-authenticated") === "true") {
+  document.querySelector("#adminLoginForm")?.classList.add("admin-locked");
+  document.querySelector("#adminArea")?.classList.add("active");
+}
 
 function loadState() {
   const saved = localStorage.getItem(storageKey);
@@ -127,6 +152,7 @@ function moonPhaseForDay(day) {
 
 function renderChapters() {
   const list = document.querySelector("#chapterList");
+  if (!list) return;
   list.innerHTML = "";
   state.chapters.forEach((chapter) => {
     const button = document.createElement("button");
@@ -153,11 +179,16 @@ function renderChapters() {
   document.querySelector("#moonPhaseName").textContent = `${moonPhase.name} · Day ${chapter.day}`;
   document.querySelector("#moonPhaseNote").textContent = moonPhase.note;
   document.querySelector("#moonPhase").setAttribute("aria-label", `${moonPhase.name} for day ${chapter.day}`);
+  const proceedButton = document.querySelector("#proceedChapter");
+  const askButton = document.querySelector("#askChapterQuestion");
+  if (proceedButton) proceedButton.textContent = chapter.day < 30 ? `Proceed to Day ${chapter.day + 1}` : "Begin Again";
+  if (askButton) askButton.textContent = `Ask a Question about Day ${chapter.day}`;
 }
 
 function renderSelectors() {
   ["#workbookDay", "#cmsDay"].forEach((selector) => {
     const select = document.querySelector(selector);
+    if (!select) return;
     select.innerHTML = "";
     state.chapters.forEach((chapter) => {
       const option = document.createElement("option");
@@ -170,6 +201,7 @@ function renderSelectors() {
 }
 
 function renderWorkbook() {
+  if (!document.querySelector("#workbookDay")) return;
   document.querySelector("#workbookDay").value = selectedDay;
   document.querySelector("#workbookResponse").value = state.workbook[selectedDay] || "";
   document.querySelector("#currentUser").textContent = currentUser
@@ -179,6 +211,7 @@ function renderWorkbook() {
 }
 
 function renderCmsChapter() {
+  if (!document.querySelector("#cmsDay")) return;
   const chapter = chapterByDay(selectedDay);
   document.querySelector("#cmsDay").value = selectedDay;
   document.querySelector("#cmsTitle").value = chapter.title;
@@ -189,20 +222,24 @@ function renderCmsChapter() {
 function renderCommunity() {
   const board = document.querySelector("#questionBoard");
   const moderation = document.querySelector("#moderationList");
-  board.innerHTML = "";
-  moderation.innerHTML = "";
+  if (board) board.innerHTML = "";
+  if (moderation) moderation.innerHTML = "";
 
-  state.questions
-    .filter((question) => question.status === "approved")
-    .forEach((question) => board.append(questionCard(question)));
+  if (board) {
+    state.questions
+      .filter((question) => question.status === "approved")
+      .forEach((question) => board.append(questionCard(question)));
 
-  if (!board.children.length) {
-    board.innerHTML = '<div class="question-card pending"><strong>No approved questions yet.</strong><p>The author can approve submitted questions from the CMS.</p></div>';
+    if (!board.children.length) {
+      board.innerHTML = '<div class="question-card pending"><strong>No approved questions yet.</strong><p>The author can approve submitted questions from the CMS.</p></div>';
+    }
   }
 
-  state.questions.forEach((question) => moderation.append(moderationCard(question)));
-  if (!moderation.children.length) {
-    moderation.innerHTML = '<div class="moderation-card"><strong>No questions yet.</strong><p>Reader submissions will appear here.</p></div>';
+  if (moderation) {
+    state.questions.forEach((question) => moderation.append(moderationCard(question)));
+    if (!moderation.children.length) {
+      moderation.innerHTML = '<div class="moderation-card"><strong>No questions yet.</strong><p>Reader submissions will appear here.</p></div>';
+    }
   }
 }
 
@@ -246,6 +283,7 @@ function moderationCard(question) {
 
 function renderShop() {
   const productGrid = document.querySelector("#productGrid");
+  if (!productGrid) return;
   productGrid.innerHTML = "";
   state.products.forEach((product) => {
     const card = document.createElement("article");
@@ -302,7 +340,7 @@ function renderAll() {
   renderStats();
 }
 
-document.querySelector("#toggleComplete").addEventListener("click", () => {
+document.querySelector("#toggleComplete")?.addEventListener("click", () => {
   if (state.completed.includes(selectedDay)) {
     state.completed = state.completed.filter((day) => day !== selectedDay);
   } else {
@@ -312,17 +350,34 @@ document.querySelector("#toggleComplete").addEventListener("click", () => {
   renderAll();
 });
 
-document.querySelector("#workbookDay").addEventListener("change", (event) => {
+document.querySelector("#proceedChapter")?.addEventListener("click", () => {
+  selectedDay = selectedDay < 30 ? selectedDay + 1 : 1;
+  renderAll();
+  document.querySelector("#chapters")?.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+document.querySelector("#askChapterQuestion")?.addEventListener("click", () => {
+  const chapter = chapterByDay(selectedDay);
+  const submitUrl = new URL(redditSubmitUrl);
+  submitUrl.searchParams.set("title", `Question about ${chapter.title}`);
+  submitUrl.searchParams.set(
+    "text",
+    `I am reading ${chapter.title}. My question is:\n\n`
+  );
+  window.open(submitUrl.toString(), "_blank", "noopener,noreferrer");
+});
+
+document.querySelector("#workbookDay")?.addEventListener("change", (event) => {
   selectedDay = Number(event.target.value);
   renderAll();
 });
 
-document.querySelector("#cmsDay").addEventListener("change", (event) => {
+document.querySelector("#cmsDay")?.addEventListener("change", (event) => {
   selectedDay = Number(event.target.value);
   renderAll();
 });
 
-document.querySelector("#saveWorkbook").addEventListener("click", () => {
+document.querySelector("#saveWorkbook")?.addEventListener("click", () => {
   if (!currentUser) {
     document.querySelector("#workbookStatus").textContent = "Please sign in before saving workbook responses.";
     return;
@@ -333,7 +388,7 @@ document.querySelector("#saveWorkbook").addEventListener("click", () => {
   renderStats();
 });
 
-document.querySelector("#clearWorkbook").addEventListener("click", () => {
+document.querySelector("#clearWorkbook")?.addEventListener("click", () => {
   delete state.workbook[selectedDay];
   persist();
   renderAll();
@@ -348,14 +403,14 @@ document.querySelectorAll(".provider").forEach((button) => {
   });
 });
 
-document.querySelector("#loginButton").addEventListener("click", () => {
+document.querySelector("#loginButton")?.addEventListener("click", () => {
   currentUser = currentUser ? null : { name: "Reader", provider: integrations.authProviders[0] };
   state.currentUser = currentUser;
   persist();
   renderWorkbook();
 });
 
-document.querySelector("#redditQuestionForm").addEventListener("submit", (event) => {
+document.querySelector("#redditQuestionForm")?.addEventListener("submit", (event) => {
   event.preventDefault();
   const title = document.querySelector("#redditTitle").value.trim();
   const body = document.querySelector("#redditBody").value.trim();
@@ -371,7 +426,7 @@ document.querySelector("#redditQuestionForm").addEventListener("submit", (event)
   status.textContent = "Reddit opened in a new tab. Post your question in the book subreddit.";
 });
 
-document.querySelector("#saveChapter").addEventListener("click", () => {
+document.querySelector("#saveChapter")?.addEventListener("click", () => {
   const chapter = chapterByDay(selectedDay);
   chapter.title = document.querySelector("#cmsTitle").value.trim();
   chapter.body = document.querySelector("#cmsBody").value.trim();
@@ -389,7 +444,7 @@ document.querySelectorAll("[data-admin-tab]").forEach((tab) => {
   });
 });
 
-document.querySelector("#addProduct").addEventListener("click", () => {
+document.querySelector("#addProduct")?.addEventListener("click", () => {
   const name = document.querySelector("#productName").value.trim();
   if (!name) return;
   state.products.push({
@@ -407,7 +462,7 @@ document.querySelector("#addProduct").addEventListener("click", () => {
   renderAll();
 });
 
-document.querySelector("#checkoutButton").addEventListener("click", () => {
+document.querySelector("#checkoutButton")?.addEventListener("click", () => {
   const quantity = Object.values(state.cart).reduce((total, itemQuantity) => total + itemQuantity, 0);
   const status = document.querySelector("#checkoutStatus");
   if (!quantity) {

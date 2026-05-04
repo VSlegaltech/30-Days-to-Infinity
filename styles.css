@@ -542,6 +542,32 @@ textarea {
   padding: 12px;
 }
 
+.admin-page main {
+  min-height: calc(100vh - 72px);
+}
+
+.admin-login {
+  margin: 0 auto 22px;
+  max-width: 520px;
+}
+
+.admin-locked {
+  display: none;
+}
+
+.admin-locked.active {
+  display: grid;
+}
+
+.chapter-actions {
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 22px;
+}
+
 .admin-tabs {
   display: grid;
   gap: 8px;

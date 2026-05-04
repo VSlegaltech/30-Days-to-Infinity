@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Author CMS · 30 Days to Infinity</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="admin-page">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="30 Days to Infinity home">
+        <span class="brand-mark">∞</span>
+        <span>30 Days to Infinity</span>
+      </a>
+      <nav aria-label="Admin">
+        <a href="/">Reader Site</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="app-section">
+        <div class="section-heading">
+          <p class="eyebrow">Secure author subdomain</p>
+          <h2>Author CMS</h2>
+        </div>
+
+        <form class="tool-panel admin-login" id="adminLoginForm">
+          <label for="adminEmail">Email</label>
+          <input id="adminEmail" type="email" autocomplete="username" placeholder="author@example.com" />
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter password" />
+          <button class="primary-button" type="submit">Log in</button>
+          <p class="helper-text" id="adminLoginStatus">Production login should use Supabase Auth and allow only users with the author role.</p>
+        </form>
+
+        <div class="admin-shell admin-locked" id="adminArea">
+          <aside class="admin-tabs" aria-label="CMS sections">
+            <button class="active" data-admin-tab="chapters" type="button">Chapters</button>
+            <button data-admin-tab="community" type="button">Moderation</button>
+            <button data-admin-tab="products" type="button">Products</button>
+            <button data-admin-tab="integrations" type="button">Integrations</button>
+          </aside>
+          <div class="admin-panel active" id="admin-chapters">
+            <div class="form-grid">
+              <label>
+                Day
+                <select id="cmsDay"></select>
+              </label>
+              <label>
+                Chapter title
+                <input id="cmsTitle" type="text" />
+              </label>
+            </div>
+            <label>
+              Chapter content
+              <textarea id="cmsBody" rows="8"></textarea>
+            </label>
+            <label>
+              Exercise prompt
+              <textarea id="cmsExercise" rows="4"></textarea>
+            </label>
+            <button class="primary-button" id="saveChapter" type="button">Save chapter</button>
+          </div>
+          <div class="admin-panel" id="admin-community">
+            <div class="moderation-list" id="moderationList"></div>
+          </div>
+          <div class="admin-panel" id="admin-products">
+            <div class="form-grid">
+              <label>
+                Product
+                <input id="productName" type="text" placeholder="Autographed copy" />
+              </label>
+              <label>
+                Price
+                <input id="productPrice" type="number" min="0" step="0.01" />
+              </label>
+              <label>
+                Shipping
+                <input id="productShipping" type="number" min="0" step="0.01" />
+              </label>
+            </div>
+            <label>
+              Description
+              <textarea id="productDescription" rows="4"></textarea>
+            </label>
+            <button class="primary-button" id="addProduct" type="button">Add product</button>
+          </div>
+          <div class="admin-panel" id="admin-integrations">
+            <div class="integration-grid">
+              <div class="integration-card">
+                <strong>Supabase CMS</strong>
+                <p>Public chapters, private workbook responses, author-only CMS updates, and approval-first community moderation.</p>
+                <code>docs/supabase-schema.sql</code>
+              </div>
+              <div class="integration-card">
+                <strong>Author login</strong>
+                <p>Use Supabase Auth on the admin subdomain and block all CMS actions unless the profile role is author.</p>
+                <code>admin.30-days-to-infinity-zf74.vercel.app</code>
+              </div>
+              <div class="integration-card">
+                <strong>USD checkout</strong>
+                <p>Create checkout sessions from a serverless endpoint, calculate product and shipping totals server-side, and confirm payment webhooks.</p>
+                <code>CHECKOUT_PUBLIC_KEY · CHECKOUT_SECRET_KEY</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
