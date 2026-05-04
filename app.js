@@ -150,6 +150,27 @@ function moonPhaseForDay(day) {
   return moonPhases.find((phase) => day <= phase.max) || moonPhases[moonPhases.length - 1];
 }
 
+function renderFormattedText(target, text) {
+  target.innerHTML = "";
+  const paragraphs = text
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
+  if (!paragraphs.length) {
+    const empty = document.createElement("p");
+    empty.textContent = "This chapter is waiting for content.";
+    target.append(empty);
+    return;
+  }
+
+  paragraphs.forEach((paragraph) => {
+    const block = document.createElement("p");
+    block.textContent = paragraph;
+    target.append(block);
+  });
+}
+
 function renderChapters() {
   const list = document.querySelector("#chapterList");
   if (!list) return;
@@ -158,7 +179,10 @@ function renderChapters() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = chapter.day === selectedDay ? "active" : "";
-    button.textContent = `${chapter.day}. ${chapter.title.replace(/^Day \d+:\s*/, "")}`;
+    button.innerHTML = `
+      <span class="chapter-day">${chapter.day}</span>
+      <span class="chapter-label">${chapter.title.replace(/^Day \d+:\s*/, "")}</span>
+    `;
     button.addEventListener("click", () => {
       selectedDay = chapter.day;
       renderChapters();
@@ -171,7 +195,7 @@ function renderChapters() {
   const chapter = chapterByDay(selectedDay);
   document.querySelector("#chapterMeta").textContent = `Day ${chapter.day} of 30`;
   document.querySelector("#chapterTitle").textContent = chapter.title;
-  document.querySelector("#chapterBody").textContent = chapter.body;
+  renderFormattedText(document.querySelector("#chapterBody"), chapter.body);
   document.querySelector("#chapterExercise").textContent = chapter.exercise;
   document.querySelector("#toggleComplete").textContent = state.completed.includes(selectedDay) ? "✓" : "○";
   const moonPhase = moonPhaseForDay(chapter.day);
@@ -348,6 +372,13 @@ document.querySelector("#toggleComplete")?.addEventListener("click", () => {
   }
   persist();
   renderAll();
+});
+
+document.querySelector("#toggleChapterNav")?.addEventListener("click", () => {
+  const layout = document.querySelector("#readerLayout");
+  layout.classList.toggle("chapter-nav-minimized");
+  const minimized = layout.classList.contains("chapter-nav-minimized");
+  document.querySelector("#toggleChapterNav").title = minimized ? "Expand chapter list" : "Minimize chapter list";
 });
 
 document.querySelector("#proceedChapter")?.addEventListener("click", () => {

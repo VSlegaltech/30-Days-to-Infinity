@@ -55,8 +55,14 @@
           <p class="eyebrow">Reader library</p>
           <h2>The Month Begins</h2>
         </div>
-        <div class="reader-layout">
-          <aside class="chapter-list" id="chapterList" aria-label="Chapter list"></aside>
+        <div class="reader-layout" id="readerLayout">
+          <aside class="chapter-list" aria-label="Chapter list">
+            <div class="chapter-list-toolbar">
+              <strong>Days</strong>
+              <button class="icon-button" id="toggleChapterNav" type="button" title="Minimize chapter list">↔</button>
+            </div>
+            <div id="chapterList"></div>
+          </aside>
           <article class="chapter-reader">
             <div class="reader-toolbar">
               <span id="chapterMeta"></span>
@@ -70,7 +76,7 @@
               </div>
             </div>
             <h3 id="chapterTitle"></h3>
-            <p id="chapterBody"></p>
+            <div class="chapter-body" id="chapterBody"></div>
             <div class="exercise-callout">
               <strong>Today’s exercise</strong>
               <p id="chapterExercise"></p>

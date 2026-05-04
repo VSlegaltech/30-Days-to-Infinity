@@ -260,6 +260,11 @@ nav a,
 
 .reader-layout {
   grid-template-columns: minmax(220px, 320px) 1fr;
+  transition: grid-template-columns 180ms ease;
+}
+
+.reader-layout.chapter-nav-minimized {
+  grid-template-columns: 76px 1fr;
 }
 
 .chapter-list,
@@ -280,19 +285,59 @@ nav a,
   padding: 10px;
 }
 
+.chapter-list-toolbar {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 4px 4px 10px;
+}
+
+.chapter-nav-minimized .chapter-list-toolbar strong,
+.chapter-nav-minimized .chapter-label {
+  display: none;
+}
+
+.chapter-nav-minimized .chapter-list-toolbar {
+  justify-content: center;
+}
+
 .chapter-list button {
+  align-items: center;
   background: transparent;
   border: 0;
   border-radius: 8px;
   color: var(--ink);
   cursor: pointer;
-  display: block;
+  display: flex;
+  gap: 10px;
   font-weight: 700;
   margin-bottom: 4px;
   min-height: 46px;
   padding: 10px 12px;
   text-align: left;
   width: 100%;
+}
+
+.chapter-day {
+  align-items: center;
+  background: var(--panel-strong);
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 30px;
+  height: 30px;
+  justify-content: center;
+}
+
+.chapter-nav-minimized .chapter-list button {
+  justify-content: center;
+  padding: 8px;
+}
+
+.chapter-nav-minimized .chapter-day {
+  flex-basis: 34px;
+  height: 34px;
 }
 
 .chapter-list button.active {
@@ -365,9 +410,23 @@ nav a,
   margin: 18px 0 12px;
 }
 
-.chapter-reader p {
+.chapter-reader p,
+.chapter-body p {
   color: var(--muted-ink);
-  line-height: 1.8;
+  line-height: 2;
+}
+
+.chapter-body {
+  margin-top: 18px;
+}
+
+.chapter-body p {
+  font-size: clamp(1.22rem, 2.1vw, 1.48rem);
+  margin: 0 0 2.1em;
+}
+
+.chapter-body p:last-child {
+  margin-bottom: 0;
 }
 
 .exercise-callout {
@@ -649,6 +708,19 @@ footer a {
 
   .cart-panel {
     position: static;
+  }
+
+  .reader-layout.chapter-nav-minimized {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-nav-minimized .chapter-list-toolbar strong,
+  .chapter-nav-minimized .chapter-label {
+    display: inline;
+  }
+
+  .chapter-nav-minimized .chapter-list button {
+    justify-content: flex-start;
   }
 }
 
