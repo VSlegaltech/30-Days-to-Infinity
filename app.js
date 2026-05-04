@@ -9,6 +9,17 @@ const integrations = {
 
 const redditCommunityUrl = "https://www.reddit.com/r/30DaystoInfinity/";
 const redditSubmitUrl = "https://www.reddit.com/r/30DaystoInfinity/submit";
+const moonPhases = [
+  { max: 1, glyph: "🌑", name: "New moon", note: "The month begins in darkness and intention." },
+  { max: 3, glyph: "🌒", name: "Waxing crescent", note: "A first sliver of practice begins to gather light." },
+  { max: 6, glyph: "🌓", name: "First quarter", note: "The practice asks for choice, structure, and attention." },
+  { max: 10, glyph: "🌔", name: "Waxing gibbous", note: "The inner work grows brighter and harder to ignore." },
+  { max: 15, glyph: "🌕", name: "Full moon", note: "The midpoint arrives with fullness, reflection, and visibility." },
+  { max: 19, glyph: "🌖", name: "Waning gibbous", note: "The light begins to turn inward and become wisdom." },
+  { max: 23, glyph: "🌗", name: "Last quarter", note: "The work becomes cleaner, quieter, and more deliberate." },
+  { max: 27, glyph: "🌘", name: "Waning crescent", note: "Release what is no longer needed for the next beginning." },
+  { max: 30, glyph: "🌑", name: "New moon", note: "The month closes as another beginning opens." }
+];
 
 const defaultChapters = Array.from({ length: 30 }, (_, index) => {
   const day = index + 1;
@@ -110,6 +121,10 @@ function chapterByDay(day) {
   return state.chapters.find((chapter) => chapter.day === Number(day));
 }
 
+function moonPhaseForDay(day) {
+  return moonPhases.find((phase) => day <= phase.max) || moonPhases[moonPhases.length - 1];
+}
+
 function renderChapters() {
   const list = document.querySelector("#chapterList");
   list.innerHTML = "";
@@ -133,6 +148,11 @@ function renderChapters() {
   document.querySelector("#chapterBody").textContent = chapter.body;
   document.querySelector("#chapterExercise").textContent = chapter.exercise;
   document.querySelector("#toggleComplete").textContent = state.completed.includes(selectedDay) ? "✓" : "○";
+  const moonPhase = moonPhaseForDay(chapter.day);
+  document.querySelector("#moonGlyph").textContent = moonPhase.glyph;
+  document.querySelector("#moonPhaseName").textContent = `${moonPhase.name} · Day ${chapter.day}`;
+  document.querySelector("#moonPhaseNote").textContent = moonPhase.note;
+  document.querySelector("#moonPhase").setAttribute("aria-label", `${moonPhase.name} for day ${chapter.day}`);
 }
 
 function renderSelectors() {
@@ -265,9 +285,11 @@ function renderShop() {
 }
 
 function renderStats() {
-  document.querySelector("#savedCount").textContent = Object.keys(state.workbook).length;
-  document.querySelector("#questionCount").textContent = state.questions.length;
-  document.querySelector("#productCount").textContent = state.products.length;
+  return {
+    savedWorkbookEntries: Object.keys(state.workbook).length,
+    communityQuestions: state.questions.length,
+    shopProducts: state.products.length
+  };
 }
 
 function renderAll() {

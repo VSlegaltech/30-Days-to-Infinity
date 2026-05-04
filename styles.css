@@ -191,18 +191,36 @@ nav a,
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
-.status-band div {
+.status-band div,
+.status-band a {
   background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  display: block;
   padding: 24px clamp(18px, 4vw, 44px);
+  text-decoration: none;
+}
+
+.status-band a {
+  transition:
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.status-band a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
 }
 
 .status-band strong {
   display: block;
-  font-size: 2rem;
+  font-size: clamp(1.35rem, 2vw, 2rem);
 }
 
 .status-band span {
   color: rgba(255, 255, 255, 0.72);
+  display: block;
+  line-height: 1.5;
+  margin-top: 6px;
 }
 
 .app-section {
@@ -295,6 +313,47 @@ nav a,
 .reader-toolbar {
   color: var(--muted-ink);
   gap: 12px;
+}
+
+.moon-phase {
+  align-items: center;
+  background: #111;
+  border-radius: 8px;
+  color: #fff;
+  display: flex;
+  gap: 18px;
+  margin-top: 22px;
+  padding: 18px;
+}
+
+.moon-glyph {
+  align-items: center;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.55), transparent 15%),
+    #050505;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  box-shadow:
+    inset -12px -16px 28px rgba(0, 0, 0, 0.62),
+    0 0 28px rgba(255, 255, 255, 0.16);
+  display: inline-flex;
+  font-size: 3.4rem;
+  height: 86px;
+  justify-content: center;
+  line-height: 1;
+  width: 86px;
+}
+
+.moon-phase strong,
+.moon-phase span {
+  display: block;
+}
+
+.moon-phase span {
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+  margin-top: 4px;
 }
 
 .chapter-reader h3 {

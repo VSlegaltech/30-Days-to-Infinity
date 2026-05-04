@@ -22,7 +22,7 @@
         <a href="#chapters">Chapters</a>
         <a href="#workbook">Workbook</a>
         <a href="#community">Community</a>
-        <a href="#shop">Shop</a>
+        <a href="#shop">Personal</a>
       </nav>
       <button class="ghost-button" id="loginButton" type="button">Sign in</button>
     </header>
@@ -49,24 +49,24 @@
           <strong>30</strong>
           <span>daily chapters</span>
         </div>
-        <div>
-          <strong id="savedCount">0</strong>
-          <span>saved workbook entries</span>
-        </div>
-        <div>
-          <strong id="questionCount">0</strong>
-          <span>community questions</span>
-        </div>
-        <div>
-          <strong id="productCount">0</strong>
-          <span>shop products</span>
-        </div>
+        <a href="#workbook">
+          <strong>Workbook</strong>
+          <span>Save your mental chatter in the accompanying workbook</span>
+        </a>
+        <a href="#community">
+          <strong>Community</strong>
+          <span>Engage with the community</span>
+        </a>
+        <a href="#shop">
+          <strong>Personal</strong>
+          <span>Sit down with the author</span>
+        </a>
       </section>
 
       <section class="app-section" id="chapters">
         <div class="section-heading">
           <p class="eyebrow">Reader library</p>
-          <h2>Daily chapters</h2>
+          <h2>The Month Begins</h2>
         </div>
         <div class="reader-layout">
           <aside class="chapter-list" id="chapterList" aria-label="Chapter list"></aside>
@@ -74,6 +74,13 @@
             <div class="reader-toolbar">
               <span id="chapterMeta"></span>
               <button class="icon-button" id="toggleComplete" type="button" title="Mark chapter complete">✓</button>
+            </div>
+            <div class="moon-phase" id="moonPhase">
+              <div class="moon-glyph" id="moonGlyph" aria-hidden="true">🌑</div>
+              <div>
+                <strong id="moonPhaseName">New moon</strong>
+                <span id="moonPhaseNote">Day 1 begins in darkness and intention.</span>
+              </div>
             </div>
             <h3 id="chapterTitle"></h3>
             <p id="chapterBody"></p>
