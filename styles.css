@@ -26,7 +26,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: Inter, system-ui, sans-serif;
+  font-family: "Google Sans", "Google Sans Text", "Product Sans", Arial, sans-serif;
 }
 
 button,
@@ -113,11 +113,6 @@ nav a,
   letter-spacing: 0.14em;
   margin: 0 0 12px;
   text-transform: uppercase;
-}
-
-.hero h1,
-.section-heading h2 {
-  font-family: "Playfair Display", Georgia, serif;
 }
 
 .hero h1 {
