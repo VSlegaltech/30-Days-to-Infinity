@@ -23,7 +23,6 @@
         <a href="#workbook">Workbook</a>
         <a href="#community">Community</a>
         <a href="#shop">Shop</a>
-        <a href="#admin">Author CMS</a>
       </nav>
       <button class="ghost-button" id="loginButton" type="button">Sign in</button>
     </header>
@@ -40,7 +39,7 @@
           </p>
           <div class="hero-actions">
             <a class="primary-button" href="#chapters">Start reading</a>
-            <a class="secondary-button" href="#admin">Open author CMS</a>
+            <a class="secondary-button" href="#community">Join the discussion</a>
           </div>
         </div>
       </section>
@@ -121,19 +120,39 @@
 
       <section class="app-section" id="community">
         <div class="section-heading">
-          <p class="eyebrow">Community</p>
-          <h2>Ask the author</h2>
+          <p class="eyebrow">Community powered by Reddit</p>
+          <h2>Ask, discuss, and get answered</h2>
         </div>
-        <div class="community-layout">
-          <form class="tool-panel" id="questionForm">
-            <label for="questionName">Name</label>
-            <input id="questionName" type="text" placeholder="Your name" />
-            <label for="questionText">Question</label>
-            <textarea id="questionText" rows="6" placeholder="What would you like to ask?"></textarea>
-            <button class="primary-button" type="submit">Submit question</button>
-            <p class="helper-text">Questions appear after author moderation.</p>
+        <div class="reddit-layout">
+          <form class="tool-panel reddit-compose" id="redditQuestionForm">
+            <label for="redditTitle">Question title</label>
+            <input id="redditTitle" type="text" placeholder="What do you want to ask about the book?" />
+            <label for="redditBody">Context</label>
+            <textarea id="redditBody" rows="7" placeholder="Add chapter/day number, what you tried, and where you feel stuck."></textarea>
+            <div class="form-row">
+              <button class="primary-button" type="submit">Ask on Reddit</button>
+              <a class="secondary-button" id="redditCommunityLink" href="https://www.reddit.com/r/30DaystoInfinity/" target="_blank" rel="noreferrer">Open community</a>
+            </div>
+            <p class="helper-text" id="redditStatus">Create a dedicated subreddit such as r/30DaystoInfinity, then point these links to it.</p>
           </form>
-          <div class="question-board" id="questionBoard"></div>
+          <div class="community-advice">
+            <article class="integration-card">
+              <strong>Best default: Reddit</strong>
+              <p>Use Reddit for public, searchable Q&A, chapter-specific threads, and author AMA sessions. It is the best fit when readers need threaded answers that can help future readers too.</p>
+            </article>
+            <article class="integration-card">
+              <strong>Use LinkedIn for reach</strong>
+              <p>LinkedIn is better for author posts, launch announcements, professional credibility, and essays that bring people back to the book site.</p>
+            </article>
+            <article class="integration-card">
+              <strong>Use Meta for private groups</strong>
+              <p>Facebook Groups work well for warmer peer support, but answers are less searchable and the experience depends heavily on moderation.</p>
+            </article>
+          </div>
+          <div class="featured-questions">
+            <h3>Featured answered questions</h3>
+            <div class="question-board" id="questionBoard"></div>
+          </div>
         </div>
       </section>
 
@@ -247,7 +266,8 @@
 
     <footer>
       <strong>30 Days to Infinity</strong>
-      <span>Prototype CMS, reader workbook, community, and shop.</span>
+      <span>Reader workbook, Reddit community, and shop.</span>
+      <a href="#admin">Author CMS</a>
     </footer>
 
     <script src="app.js"></script>

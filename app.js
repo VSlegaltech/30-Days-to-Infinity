@@ -4,8 +4,11 @@ const integrations = {
   cms: "Supabase",
   authProviders: ["Google", "Facebook"],
   checkout: "USD checkout",
-  communityModeration: "approval_required"
+  communityModeration: "reddit_first"
 };
+
+const redditCommunityUrl = "https://www.reddit.com/r/30DaystoInfinity/";
+const redditSubmitUrl = "https://www.reddit.com/r/30DaystoInfinity/submit";
 
 const defaultChapters = Array.from({ length: 30 }, (_, index) => {
   const day = index + 1;
@@ -70,6 +73,8 @@ const defaultProducts = [
 const state = loadState();
 let selectedDay = 1;
 let currentUser = state.currentUser;
+
+document.querySelector("#redditCommunityLink").href = redditCommunityUrl;
 
 function loadState() {
   const saved = localStorage.getItem(storageKey);
@@ -328,15 +333,20 @@ document.querySelector("#loginButton").addEventListener("click", () => {
   renderWorkbook();
 });
 
-document.querySelector("#questionForm").addEventListener("submit", (event) => {
+document.querySelector("#redditQuestionForm").addEventListener("submit", (event) => {
   event.preventDefault();
-  const name = document.querySelector("#questionName").value.trim() || "Anonymous reader";
-  const text = document.querySelector("#questionText").value.trim();
-  if (!text) return;
-  state.questions.unshift({ id: crypto.randomUUID(), name, text, status: "pending", answer: "" });
-  event.target.reset();
-  persist();
-  renderAll();
+  const title = document.querySelector("#redditTitle").value.trim();
+  const body = document.querySelector("#redditBody").value.trim();
+  const status = document.querySelector("#redditStatus");
+  if (!title) {
+    status.textContent = "Add a question title before opening Reddit.";
+    return;
+  }
+  const submitUrl = new URL(redditSubmitUrl);
+  submitUrl.searchParams.set("title", title);
+  submitUrl.searchParams.set("text", body);
+  window.open(submitUrl.toString(), "_blank", "noopener,noreferrer");
+  status.textContent = "Reddit opened in a new tab. Post your question in the book subreddit.";
 });
 
 document.querySelector("#saveChapter").addEventListener("click", () => {
