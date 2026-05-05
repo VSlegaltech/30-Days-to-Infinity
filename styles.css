@@ -311,7 +311,7 @@ nav a,
   color: var(--ink);
   cursor: pointer;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   font-weight: 700;
   margin-bottom: 4px;
   min-height: 46px;
@@ -327,6 +327,14 @@ nav a,
   display: inline-flex;
   flex: 0 0 30px;
   height: 30px;
+  justify-content: center;
+}
+
+.chapter-list-moon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 24px;
+  font-size: 1.1rem;
   justify-content: center;
 }
 
@@ -370,7 +378,7 @@ nav a,
   border-radius: 8px;
   color: #fff;
   display: flex;
-  gap: 18px;
+  justify-content: center;
   margin-top: 22px;
   padding: 18px;
 }
@@ -392,17 +400,6 @@ nav a,
   justify-content: center;
   line-height: 1;
   width: 86px;
-}
-
-.moon-phase strong,
-.moon-phase span {
-  display: block;
-}
-
-.moon-phase span {
-  color: rgba(255, 255, 255, 0.72);
-  line-height: 1.5;
-  margin-top: 4px;
 }
 
 .chapter-video {

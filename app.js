@@ -235,6 +235,7 @@ function renderChapters() {
     button.className = chapter.day === selectedDay ? "active" : "";
     button.innerHTML = `
       <span class="chapter-day">${chapter.day}</span>
+      <span class="chapter-list-moon" aria-hidden="true">${moonPhaseForDay(chapter.day).glyph}</span>
       <span class="chapter-label">${chapter.title.replace(/^Day \d+:\s*/, "")}</span>
     `;
     button.addEventListener("click", () => {
@@ -254,8 +255,6 @@ function renderChapters() {
   document.querySelector("#toggleComplete").textContent = state.completed.includes(selectedDay) ? "✓" : "○";
   const moonPhase = moonPhaseForDay(chapter.day);
   document.querySelector("#moonGlyph").textContent = moonPhase.glyph;
-  document.querySelector("#moonPhaseName").textContent = `${moonPhase.name} · Day ${chapter.day}`;
-  document.querySelector("#moonPhaseNote").textContent = moonPhase.note;
   document.querySelector("#moonPhase").setAttribute("aria-label", `${moonPhase.name} for day ${chapter.day}`);
   const proceedButton = document.querySelector("#proceedChapter");
   const askButton = document.querySelector("#askChapterQuestion");
