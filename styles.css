@@ -405,6 +405,51 @@ nav a,
   margin-top: 4px;
 }
 
+.chapter-video {
+  aspect-ratio: 16 / 9;
+  background: #08090a;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 22px;
+  overflow: hidden;
+}
+
+.chapter-video iframe {
+  border: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.video-placeholder {
+  align-items: center;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  justify-content: center;
+  min-height: 260px;
+  padding: 24px;
+  text-align: center;
+}
+
+.video-placeholder::before {
+  align-items: center;
+  background: var(--terracotta);
+  border-radius: 50%;
+  color: #fff;
+  content: "▶";
+  display: inline-flex;
+  height: 64px;
+  justify-content: center;
+  width: 64px;
+}
+
+.video-placeholder span {
+  color: var(--muted-ink);
+  line-height: 1.5;
+}
+
 .chapter-reader h3 {
   font-size: clamp(1.8rem, 4vw, 3.2rem);
   margin: 18px 0 12px;

@@ -61,7 +61,8 @@ const defaultChapters = Array.from({ length: 30 }, (_, index) => {
     body:
       "This is editable chapter content for the author CMS. Replace this placeholder with the day's essay, teaching, story, or reflection. The reader experience updates immediately after you save.",
     exercise:
-      "Write one honest paragraph about what this day is asking you to notice, practice, or release."
+      "Write one honest paragraph about what this day is asking you to notice, practice, or release.",
+    video: ""
   };
 });
 
@@ -186,6 +187,44 @@ function renderFormattedText(target, text) {
   });
 }
 
+function youtubeEmbedUrl(value) {
+  if (!value) return "";
+  const trimmed = value.trim();
+  const patterns = [
+    /youtube\.com\/watch\?v=([^&]+)/,
+    /youtu\.be\/([^?&]+)/,
+    /youtube\.com\/embed\/([^?&]+)/
+  ];
+  const match = patterns.map((pattern) => trimmed.match(pattern)).find(Boolean);
+  const videoId = match ? match[1] : trimmed;
+  return /^[a-zA-Z0-9_-]{6,}$/.test(videoId)
+    ? `https://www.youtube-nocookie.com/embed/${videoId}`
+    : "";
+}
+
+function renderChapterVideo(chapter) {
+  const target = document.querySelector("#chapterVideo");
+  if (!target) return;
+  const embedUrl = youtubeEmbedUrl(chapter.video || chapter.videoUrl || "");
+  if (embedUrl) {
+    target.innerHTML = `
+      <iframe
+        src="${embedUrl}"
+        title="${chapter.title} video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    `;
+    return;
+  }
+  target.innerHTML = `
+    <div class="video-placeholder">
+      <strong>Chapter video</strong>
+      <span>YouTube video placeholder for ${chapter.title}</span>
+    </div>
+  `;
+}
+
 function renderChapters() {
   const list = document.querySelector("#chapterList");
   if (!list) return;
@@ -210,6 +249,7 @@ function renderChapters() {
   const chapter = chapterByDay(selectedDay);
   document.querySelector("#chapterMeta").textContent = `Day ${chapter.day} of 30`;
   document.querySelector("#chapterTitle").textContent = chapter.title;
+  renderChapterVideo(chapter);
   renderFormattedText(document.querySelector("#chapterBody"), chapter.body);
   document.querySelector("#toggleComplete").textContent = state.completed.includes(selectedDay) ? "✓" : "○";
   const moonPhase = moonPhaseForDay(chapter.day);
@@ -255,6 +295,7 @@ function renderCmsChapter() {
   const chapter = chapterByDay(selectedDay);
   document.querySelector("#cmsDay").value = selectedDay;
   document.querySelector("#cmsTitle").value = chapter.title;
+  document.querySelector("#cmsVideo").value = chapter.video || chapter.videoUrl || "";
   document.querySelector("#cmsBody").value = chapter.body;
   document.querySelector("#cmsExercise").value = chapter.exercise;
 }
@@ -553,6 +594,7 @@ document.querySelector("#siteQuestionForm")?.addEventListener("submit", (event) 
 document.querySelector("#saveChapter")?.addEventListener("click", () => {
   const chapter = chapterByDay(selectedDay);
   chapter.title = document.querySelector("#cmsTitle").value.trim();
+  chapter.video = document.querySelector("#cmsVideo").value.trim();
   chapter.body = document.querySelector("#cmsBody").value.trim();
   chapter.exercise = document.querySelector("#cmsExercise").value.trim();
   persist();
