@@ -77,11 +77,6 @@
             </div>
             <h3 id="chapterTitle"></h3>
             <div class="chapter-body" id="chapterBody"></div>
-            <div class="exercise-callout">
-              <strong>Today’s exercise</strong>
-              <p id="chapterExercise"></p>
-              <a class="text-link" href="#workbook">Open workbook</a>
-            </div>
             <div class="chapter-actions" aria-label="Chapter actions">
               <button class="primary-button" id="proceedChapter" type="button">Proceed</button>
               <button class="secondary-button" id="askChapterQuestion" type="button">Ask a Question</button>
@@ -99,6 +94,10 @@
           <div class="tool-panel">
             <label for="workbookDay">Choose day</label>
             <select id="workbookDay"></select>
+            <div class="workbook-prompt">
+              <strong>Today’s exercise</strong>
+              <div class="formatted-text" id="workbookExercise"></div>
+            </div>
             <label for="workbookResponse">Reflection</label>
             <textarea id="workbookResponse" rows="10" placeholder="Sign in, then write your response here."></textarea>
             <div class="form-row">
@@ -138,6 +137,14 @@
               <a class="secondary-button" id="redditCommunityLink" href="https://www.reddit.com/r/30DaystoInfinity/" target="_blank" rel="noreferrer">Open community</a>
             </div>
             <p class="helper-text" id="redditStatus">Create a dedicated subreddit such as r/30DaystoInfinity, then point these links to it.</p>
+          </form>
+          <form class="tool-panel" id="siteQuestionForm">
+            <label for="siteQuestionName">Name</label>
+            <input id="siteQuestionName" type="text" placeholder="Your name" />
+            <label for="siteQuestionText">Ask inside this website</label>
+            <textarea id="siteQuestionText" rows="7" placeholder="Ask a question for the author or community."></textarea>
+            <button class="primary-button" type="submit">Post to Website Community</button>
+            <p class="helper-text" id="siteQuestionStatus">Website questions are saved here first. In production, Supabase will store and moderate them.</p>
           </form>
           <div class="community-advice">
             <article class="integration-card">
@@ -195,6 +202,22 @@
       <span>Reader workbook, Reddit community, and shop.</span>
       <a href="https://admin.30-days-to-infinity-zf74.vercel.app/">Author CMS</a>
     </footer>
+
+    <div class="choice-modal" id="questionChoiceModal" hidden>
+      <div class="choice-dialog" role="dialog" aria-modal="true" aria-labelledby="questionChoiceTitle">
+        <h3 id="questionChoiceTitle">Where should this question go?</h3>
+        <p>Choose Reddit for public threaded discussion, or keep it inside the website community.</p>
+        <label class="choice-save">
+          <input id="saveQuestionChoice" type="checkbox" checked />
+          Save this choice for next time
+        </label>
+        <div class="form-row">
+          <button class="primary-button" id="chooseRedditQuestion" type="button">Ask on Reddit</button>
+          <button class="secondary-button" id="chooseSiteQuestion" type="button">Ask on Website</button>
+          <button class="secondary-button" id="closeQuestionChoice" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>

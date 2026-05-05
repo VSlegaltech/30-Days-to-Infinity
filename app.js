@@ -9,6 +9,7 @@ const integrations = {
 
 const redditCommunityUrl = "https://www.reddit.com/r/30DaystoInfinity/";
 const redditSubmitUrl = "https://www.reddit.com/r/30DaystoInfinity/submit";
+const questionPreferenceCookie = "question_destination";
 const moonPhases = [
   { max: 1, glyph: "🌑", name: "New moon", note: "The month begins in darkness and intention." },
   { max: 3, glyph: "🌒", name: "Waxing crescent", note: "A first sliver of practice begins to gather light." },
@@ -138,6 +139,19 @@ function persist() {
   localStorage.setItem(storageKey, JSON.stringify(state));
 }
 
+function setCookie(name, value, days = 365) {
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+  localStorage.setItem(name, value);
+}
+
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${name}=`))
+    ?.split("=")[1] || localStorage.getItem(name);
+}
+
 function money(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
@@ -151,6 +165,7 @@ function moonPhaseForDay(day) {
 }
 
 function renderFormattedText(target, text) {
+  if (!target) return;
   target.innerHTML = "";
   const paragraphs = text
     .split(/\n\s*\n/)
@@ -196,7 +211,6 @@ function renderChapters() {
   document.querySelector("#chapterMeta").textContent = `Day ${chapter.day} of 30`;
   document.querySelector("#chapterTitle").textContent = chapter.title;
   renderFormattedText(document.querySelector("#chapterBody"), chapter.body);
-  document.querySelector("#chapterExercise").textContent = chapter.exercise;
   document.querySelector("#toggleComplete").textContent = state.completed.includes(selectedDay) ? "✓" : "○";
   const moonPhase = moonPhaseForDay(chapter.day);
   document.querySelector("#moonGlyph").textContent = moonPhase.glyph;
@@ -226,7 +240,9 @@ function renderSelectors() {
 
 function renderWorkbook() {
   if (!document.querySelector("#workbookDay")) return;
+  const chapter = chapterByDay(selectedDay);
   document.querySelector("#workbookDay").value = selectedDay;
+  renderFormattedText(document.querySelector("#workbookExercise"), chapter.exercise);
   document.querySelector("#workbookResponse").value = state.workbook[selectedDay] || "";
   document.querySelector("#currentUser").textContent = currentUser
     ? `Signed in as ${currentUser.name} via ${currentUser.provider}`
@@ -251,11 +267,11 @@ function renderCommunity() {
 
   if (board) {
     state.questions
-      .filter((question) => question.status === "approved")
+      .filter((question) => question.status === "approved" || question.status === "pending")
       .forEach((question) => board.append(questionCard(question)));
 
     if (!board.children.length) {
-      board.innerHTML = '<div class="question-card pending"><strong>No approved questions yet.</strong><p>The author can approve submitted questions from the CMS.</p></div>';
+      board.innerHTML = '<div class="question-card pending"><strong>No questions yet.</strong><p>Ask on Reddit or post inside the website community.</p></div>';
     }
   }
 
@@ -269,13 +285,56 @@ function renderCommunity() {
 
 function questionCard(question) {
   const card = document.createElement("article");
-  card.className = "question-card";
+  card.className = question.status === "pending" ? "question-card pending" : "question-card";
   card.innerHTML = `
     <strong>${question.name}</strong>
     <p>${question.text}</p>
+    ${question.status === "pending" ? "<p><strong>Pending review</strong></p>" : ""}
     ${question.answer ? `<div class="answer"><strong>Author answer</strong><p>${question.answer}</p></div>` : ""}
   `;
   return card;
+}
+
+function openRedditQuestion(chapter = chapterByDay(selectedDay)) {
+  const submitUrl = new URL(redditSubmitUrl);
+  submitUrl.searchParams.set("title", `Question about ${chapter.title}`);
+  submitUrl.searchParams.set(
+    "text",
+    `I am reading ${chapter.title}. My question is:\n\n`
+  );
+  window.open(submitUrl.toString(), "_blank", "noopener,noreferrer");
+}
+
+function openSiteQuestion(chapter = chapterByDay(selectedDay)) {
+  document.querySelector("#community")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const questionBox = document.querySelector("#siteQuestionText");
+  if (questionBox) {
+    questionBox.value = `Question about ${chapter.title}\n\n`;
+    questionBox.focus();
+  }
+}
+
+function saveQuestionPreferenceIfNeeded(destination) {
+  if (document.querySelector("#saveQuestionChoice")?.checked) {
+    setCookie(questionPreferenceCookie, destination);
+  }
+}
+
+function askQuestion(destination) {
+  const chapter = chapterByDay(selectedDay);
+  if (destination === "reddit") {
+    openRedditQuestion(chapter);
+    return;
+  }
+  openSiteQuestion(chapter);
+}
+
+function showQuestionChoice() {
+  document.querySelector("#questionChoiceModal").hidden = false;
+}
+
+function hideQuestionChoice() {
+  document.querySelector("#questionChoiceModal").hidden = true;
 }
 
 function moderationCard(question) {
@@ -388,15 +447,27 @@ document.querySelector("#proceedChapter")?.addEventListener("click", () => {
 });
 
 document.querySelector("#askChapterQuestion")?.addEventListener("click", () => {
-  const chapter = chapterByDay(selectedDay);
-  const submitUrl = new URL(redditSubmitUrl);
-  submitUrl.searchParams.set("title", `Question about ${chapter.title}`);
-  submitUrl.searchParams.set(
-    "text",
-    `I am reading ${chapter.title}. My question is:\n\n`
-  );
-  window.open(submitUrl.toString(), "_blank", "noopener,noreferrer");
+  const preference = decodeURIComponent(getCookie(questionPreferenceCookie) || "");
+  if (preference === "reddit" || preference === "site") {
+    askQuestion(preference);
+    return;
+  }
+  showQuestionChoice();
 });
+
+document.querySelector("#chooseRedditQuestion")?.addEventListener("click", () => {
+  saveQuestionPreferenceIfNeeded("reddit");
+  hideQuestionChoice();
+  askQuestion("reddit");
+});
+
+document.querySelector("#chooseSiteQuestion")?.addEventListener("click", () => {
+  saveQuestionPreferenceIfNeeded("site");
+  hideQuestionChoice();
+  askQuestion("site");
+});
+
+document.querySelector("#closeQuestionChoice")?.addEventListener("click", hideQuestionChoice);
 
 document.querySelector("#workbookDay")?.addEventListener("change", (event) => {
   selectedDay = Number(event.target.value);
@@ -455,6 +526,28 @@ document.querySelector("#redditQuestionForm")?.addEventListener("submit", (event
   submitUrl.searchParams.set("text", body);
   window.open(submitUrl.toString(), "_blank", "noopener,noreferrer");
   status.textContent = "Reddit opened in a new tab. Post your question in the book subreddit.";
+});
+
+document.querySelector("#siteQuestionForm")?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = document.querySelector("#siteQuestionName").value.trim() || "Anonymous reader";
+  const text = document.querySelector("#siteQuestionText").value.trim();
+  const status = document.querySelector("#siteQuestionStatus");
+  if (!text) {
+    status.textContent = "Write a question before posting.";
+    return;
+  }
+  state.questions.unshift({
+    id: crypto.randomUUID(),
+    name,
+    text,
+    status: "pending",
+    answer: ""
+  });
+  persist();
+  document.querySelector("#siteQuestionForm").reset();
+  status.textContent = "Question saved to the website community and marked pending review.";
+  renderCommunity();
 });
 
 document.querySelector("#saveChapter")?.addEventListener("click", () => {
